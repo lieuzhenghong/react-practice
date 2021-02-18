@@ -2,8 +2,10 @@
 import logo from './logo.svg';
 import './App.css';
 import * as React from 'react';
+import { IngredientList } from './IngredientList.js';
+import { BowlStatsPanel } from './BowlStatsPanel.js';
 
-const INGREDIENTS = [
+export const INGREDIENTS = [
   {
     id: 1,
     name: "Chestnut Brown Rice",
@@ -20,7 +22,7 @@ const INGREDIENTS = [
     id: 2,
     name: "Free Range Fusilli",
     type: "carb",
-    description: "Fusilli that was allowed to roam free during its lifetime",
+    description: "Whole-wheat fusilli that was allowed to roam free during its lifetime",
     macros: {
       "calories": 1.58,
       "protein": 0.06,
@@ -59,76 +61,19 @@ const initialState = {
   ],
 }
 
+export const BowlDispatch = React.createContext(null);
+export const BowlStatus = React.createContext(initialState);
 
-
-function IngredientList(props): React.Node {
-  const ingredients = props.ingredients
-  const ingredientItems = ingredients.map((ingredient) => <Ingredient ingredient={ingredient} key={ingredient.id} />)
-  return (
-    <div className="IngredientList">
-      {ingredientItems}
-    </div>
-  )
-}
-
-function Ingredient(props): React.Node {
-  return (
-    <div className="Ingredient">
-      <b> {props.ingredient.id} {props.ingredient.name} </b>
-      {props.ingredient.description}
-      <AmountSelector ingredientId={props.ingredient.id} />
-    </div>
-  )
-}
-
-
-
-function AmountSelector(props): React.Node {
-  const dispatch = React.useContext(BowlDispatch)
-  function handleChange(value) {
-    console.log("Am I called?", value)
-    dispatch({
-      type: "changeAmount",
-      id: props.ingredientId,
-      amount: value,
-    })
-  }
-  return (
-    <div className="AmountSelector">
-      <AmountSlider onChange={handleChange} ingredientId={props.ingredientId} />
-    </div>
-  )
-}
-
-function AmountSlider(props): React.Node {
-  const bowl_stats = React.useContext(BowlStatus)
-  const idx = bowl_stats.ingredients_ordered.findIndex((e) => e.id === props.ingredientId)
-  return (
-    <input onChange={(e) => props.onChange(e.target.value)}
-      type="range" min="0" max="500" step="10"
-      value={bowl_stats.ingredients_ordered[idx].amount}
-    ></input>
-  )
-}
-
-
-const BowlDispatch = React.createContext(null);
-const BowlStatus = React.createContext(initialState);
-
-function getBowlTotal(state) {
-  return state.ingredients_ordered.reduce((acc, elem) => {
-    const idx = INGREDIENTS.findIndex((e) => e.id === elem.id)
-    return acc + INGREDIENTS[idx].price * elem.amount
-  }, 0)
-}
-
-function reduce(state, action) {
+function updateState(state, action) {
+  // Reduce function called by useReducer Hook in App
   switch (action.type) {
     case 'changeAmount':
       const newIngredients = state.ingredients_ordered
       // if id not in ingredients_ordered
       // otherwise, update 
       const indexToMutate = newIngredients.findIndex((ele) => ele.id === action.id)
+      // note that this will bung up if indexToMutate finds -1
+      // [FIXME] fix this 
       newIngredients[indexToMutate].amount = action.amount
       return { ingredients_ordered: newIngredients }
     default:
@@ -136,27 +81,8 @@ function reduce(state, action) {
   }
 }
 
-function BowlStats(): React.Node {
-  const bowl_stats = React.useContext(BowlStatus)
-  const bowl_ingredients = bowl_stats.ingredients_ordered.map((elem) => {
-    const i = INGREDIENTS.findIndex((e) => e.id === elem.id)
-    return (
-      <div key={elem.id}>
-        {INGREDIENTS[i].name}: {elem.amount}g
-      </div>)
-  })
-  const bowl_total = getBowlTotal(bowl_stats)
-  return (
-    <div className="BowlStats">
-      <p><b>Your Bowl:</b></p>
-      {bowl_ingredients}
-      <b> Total: </b> ${bowl_total.toFixed(2)}
-    </div>
-  )
-}
-
 function App(): React.Node {
-  const [state, dispatch] = React.useReducer(reduce, initialState)
+  const [state, dispatch] = React.useReducer(updateState, initialState)
   return (
     <div className="App" >
       <h2>Bowls to the Gram</h2>
@@ -164,7 +90,7 @@ function App(): React.Node {
       <BowlDispatch.Provider value={dispatch} >
         <IngredientList ingredients={INGREDIENTS} />
         <BowlStatus.Provider value={state} >
-          <BowlStats />
+          <BowlStatsPanel />
         </BowlStatus.Provider>
       </BowlDispatch.Provider>
     </div >
