@@ -1,0 +1,23 @@
+{
+  "files": {
+    "main.css": "/react-practice/static/css/main.de1bf20e.chunk.css",
+    "main.js": "/react-practice/static/js/main.06cfc416.chunk.js",
+    "main.js.map": "/react-practice/static/js/main.06cfc416.chunk.js.map",
+    "runtime-main.js": "/react-practice/static/js/runtime-main.9d290c4c.js",
+    "runtime-main.js.map": "/react-practice/static/js/runtime-main.9d290c4c.js.map",
+    "static/js/2.1aee3a16.chunk.js": "/react-practice/static/js/2.1aee3a16.chunk.js",
+    "static/js/2.1aee3a16.chunk.js.map": "/react-practice/static/js/2.1aee3a16.chunk.js.map",
+    "static/js/3.ba66a074.chunk.js": "/react-practice/static/js/3.ba66a074.chunk.js",
+    "static/js/3.ba66a074.chunk.js.map": "/react-practice/static/js/3.ba66a074.chunk.js.map",
+    "index.html": "/react-practice/index.html",
+    "static/css/main.de1bf20e.chunk.css.map": "/react-practice/static/css/main.de1bf20e.chunk.css.map",
+    "static/js/2.1aee3a16.chunk.js.LICENSE.txt": "/react-practice/static/js/2.1aee3a16.chunk.js.LICENSE.txt",
+    "static/media/logo.6ce24c58.svg": "/react-practice/static/media/logo.6ce24c58.svg"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.9d290c4c.js",
+    "static/js/2.1aee3a16.chunk.js",
+    "static/css/main.de1bf20e.chunk.css",
+    "static/js/main.06cfc416.chunk.js"
+  ]
+}
