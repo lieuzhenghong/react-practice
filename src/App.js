@@ -86,6 +86,7 @@ function App(): React.Node {
   return (
     <div className="App" >
       <h2>Bowls to the Gram</h2>
+      <p><i>Cool kids call it "Bees to the Gees"</i></p>
       <p> Build your own bowl and get exactly the macros you need</p>
       <BowlDispatch.Provider value={dispatch} >
         <IngredientList ingredients={INGREDIENTS} />
