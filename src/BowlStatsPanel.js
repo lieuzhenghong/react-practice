@@ -19,40 +19,39 @@ function getBowlMacros(state) {
   }
   return state.ingredients_ordered.reduce((acc, elem) => {
     const idx = INGREDIENTS.findIndex((e) => e.id === elem.id)
-    const new_acc = acc
-    Object.keys(new_acc).forEach((macro, index) => {
-      new_acc[macro] += INGREDIENTS[idx].macros[macro] * elem.amount
+    const newMacros = acc
+    Object.keys(newMacros).forEach((macro, index) => {
+      newMacros[macro] += INGREDIENTS[idx].macros[macro] * elem.amount
     })
-    console.log(new_acc)
-    return new_acc
+    return newMacros
   }, initialMacros)
 }
 
 
 export function BowlStatsPanel(): React.Node {
-  const bowl_stats = React.useContext(BowlStatus)
-  const bowl_ingredients = bowl_stats.ingredients_ordered.map((elem) => {
+  const bowlStats = React.useContext(BowlStatus)
+  const bowlStatsRender = bowlStats.ingredients_ordered.map((elem) => {
     const i = INGREDIENTS.findIndex((e) => e.id === elem.id)
     return (
       <div key={elem.id}>
         {INGREDIENTS[i].name}: {elem.amount}g
       </div>)
   })
-  const bowl_macros = getBowlMacros(bowl_stats)
-  const bowl_macros_render = Object.keys(bowl_macros).map((macro) => {
+  const bowlMacros = getBowlMacros(bowlStats)
+  const bowlMacrosRender = Object.keys(bowlMacros).map((macro) => {
     return (
       <div key={macro}>
-        {macro} : {bowl_macros[macro].toFixed(2)}
+        {macro} : {bowlMacros[macro].toFixed(2)}
       </div>
     )
   })
-  const bowl_total = getBowlTotal(bowl_stats)
+  const bowl_total = getBowlTotal(bowlStats)
   return (
     <div className="BowlStats">
       <p><b>Your Bowl:</b></p>
-      {bowl_ingredients}
+      {bowlStatsRender}
       <p><b> Macros: </b></p>
-      {bowl_macros_render}
+      {bowlMacrosRender}
       <b> Total: </b> ${bowl_total.toFixed(2)}
     </div>
   )
